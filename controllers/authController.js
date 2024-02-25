@@ -127,7 +127,8 @@ exports.createQuizController = async (req, res, next) => {
 
 exports.listQuizController = async (req, res, next) => {
   try {
-    let QuizData = await QuizOptions.find();
+    let testId = req.params.id;
+    let QuizData = await QuizOptions.find({ testId: testId });
     res.status(201).json(QuizData);
   } catch (error) {
     console.error("Error creating quiz option:", error);
@@ -235,7 +236,21 @@ exports.deleteMarksController = async (req, res, next) => {
 };
 
 //tests
+exports.deleteTestController = async (req, res, next) => {
+  try {
+    let userData = req.user;
+    const testId = req.params.id;
+    const Tests = await classTest.findOneAndDelete({
+      _id: new mongoose.Types.ObjectId(testId),
+    });
 
+    console.log(userData, Tests, "Mark");
+    return res.status(200).json(Tests);
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
 exports.createTestsController = async (req, res, next) => {
   try {
     let userData = req.user;

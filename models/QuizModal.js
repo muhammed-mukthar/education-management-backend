@@ -30,7 +30,7 @@ quizOptionsSchema.pre("save", async function (next) {
 
   try {
     const lastDocument = await this.constructor.findOne(
-      {},
+      { testId: this.testId },
       { number: 1 },
       { sort: { number: -1 } }
     );

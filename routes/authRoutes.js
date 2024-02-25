@@ -16,6 +16,7 @@ const {
   createTestsController,
   getTestsByTeacherController,
   getTestsBySubjectController,
+  deleteTestController,
 } = require("../controllers/authController");
 const protect = require("../middlewares/autherisationMiddleware");
 
@@ -34,7 +35,7 @@ router.post("/logout", logoutController);
 
 router.post("/list", userListController);
 router.post("/create-quiz", createQuizController);
-router.post("/list-quiz", listQuizController);
+router.post("/list-quiz/:id", listQuizController);
 
 //user management
 
@@ -57,5 +58,6 @@ router.delete("/marks/delete/:id", protect, deleteMarksController);
 router.post("/tests/create", protect, createTestsController);
 router.get("/teacher-tests", protect, getTestsByTeacherController);
 router.get("/subject-tests", protect, getTestsBySubjectController);
+router.delete("/tests/delete/:id", protect, deleteTestController);
 
 module.exports = router;
