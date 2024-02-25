@@ -19,10 +19,6 @@ const userSchema = new mongoose.Schema({
     required: [true, "Password is Required"],
     minLength: [6, "Password length should be grater than 6 characters"],
   },
-  customerId: {
-    type: String,
-    default: "",
-  },
   role: {
     type: String,
     default: "student",
@@ -33,6 +29,10 @@ const userSchema = new mongoose.Schema({
   },
   parentsEmail: {
     type: String,
+  },
+  verify: {
+    type: Boolean,
+    default: false,
   },
 });
 

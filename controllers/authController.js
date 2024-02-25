@@ -22,7 +22,7 @@ exports.sendToken = (user, statusCode, res) => {
 //REGISTER
 exports.registerContoller = async (req, res, next) => {
   try {
-    const { username, email, password, parentsEmail, role, course } = req.body; 
+    const { username, email, password, parentsEmail, role, course } = req.body;
     //exisitng user
     const exisitingEmail = await userModel.findOne({ email });
     if (exisitingEmail) {
@@ -31,7 +31,14 @@ exports.registerContoller = async (req, res, next) => {
         message: "email  already exist",
       });
     }
-    const user = await userModel.create({ username, email, password,parentsEmail, role ,course );
+    const user = await userModel.create({
+      username,
+      email,
+      password,
+      parentsEmail,
+      role,
+      course,
+    });
     req.userid = user.id;
 
     this.sendToken(user, 201, res);
@@ -50,8 +57,12 @@ exports.loginController = async (req, res, next) => {
       return res.status(500).json("email password required");
     }
     const user = await userModel.findOne({ email });
+    console.log(user, "user");
     if (!user) {
       return res.status(500).json({ error: "Invalid Credentials" });
+    }
+    if (!user.verify) {
+      return res.status(500).json({ error: "You are not verified" });
     }
     const isMatch = await user.matchPassword(password);
     if (!isMatch) {
