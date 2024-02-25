@@ -5,6 +5,7 @@ const userModel = require("../models/userModel");
 const errorResponse = require("../utils/errorResponse");
 const MarkSheet = require("../models/MarkSheet");
 const classTest = require("../models/testModal");
+const TestResult = require("../models/TestResult");
 
 // JWT TOKEN
 exports.sendToken = (user, statusCode, res) => {
@@ -286,6 +287,39 @@ exports.getTestsBySubjectController = async (req, res, next) => {
     let userData = req.user;
     const result = await classTest.find({
       course: userData?.course,
+    });
+
+    return res.status(200).json(result);
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+//result
+
+exports.createTestResultController = async (req, res, next) => {
+  try {
+    let userData = req.user;
+    const { marks, testId } = req.body;
+    const result = await TestResult.create({
+      marks,
+      testId: testId,
+      student: userData.username,
+      studentId: userData?._id,
+    });
+    return res.status(200).json(result);
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+exports.getTestsResultsController = async (req, res, next) => {
+  try {
+    let userData = req.user;
+    let testId = req.params.id;
+    const result = await classTest.find({
+      testId: testId,
     });
 
     return res.status(200).json(result);
