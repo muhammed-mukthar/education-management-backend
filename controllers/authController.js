@@ -1,3 +1,4 @@
+const { default: mongoose } = require("mongoose");
 const errorHandler = require("../middlewares/errorMiddleware");
 const QuizOptions = require("../models/QuizModal");
 const userModel = require("../models/userModel");
@@ -114,5 +115,21 @@ exports.listQuizController = async (req, res, next) => {
   } catch (error) {
     console.error("Error creating quiz option:", error);
     res.status(500).send("Internal Server Error");
+  }
+};
+
+exports.acceptUserController = async (req, res, next) => {
+  try {
+    let userId = req.params.id;
+    const user = await userModel.findOneAndUpdate(
+      {
+        _id: mongoose.Types.ObjectId(userId),
+      },
+      { $set: { verify: true } }
+    );
+    res.status(201).json(user);
+  } catch (error) {
+    console.error("Error accepting user:", error);
+    res.status(500).send("Error accepting user");
   }
 };

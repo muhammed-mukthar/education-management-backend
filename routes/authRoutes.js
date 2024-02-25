@@ -6,6 +6,7 @@ const {
   userListController,
   createQuizController,
   listQuizController,
+  acceptUserController,
 } = require("../controllers/authController");
 
 //router object
@@ -24,5 +25,9 @@ router.post("/logout", logoutController);
 router.post("/list", userListController);
 router.post("/create-quiz", createQuizController);
 router.post("/list-quiz", listQuizController);
+
+//user management
+
+router.post("/accept/:id", acceptUserController);
 
 module.exports = router;
