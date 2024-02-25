@@ -7,7 +7,13 @@ const {
   createQuizController,
   listQuizController,
   acceptUserController,
+  studentUsersController,
+  createMarksController,
+  getMarksController,
+  editMarksController,
+  deleteMarksController,
 } = require("../controllers/authController");
+const protect = require("../middlewares/autherisationMiddleware");
 
 //router object
 const router = express.Router();
@@ -29,5 +35,17 @@ router.post("/list-quiz", listQuizController);
 //user management
 
 router.post("/accept/:id", acceptUserController);
+
+//teaher
+
+router.post("/marks/users", protect, studentUsersController);
+
+//marks
+
+router.post("/marks/create", protect, createMarksController);
+router.put("/marks/edit", protect, editMarksController);
+
+router.get("/mark-list", protect, getMarksController);
+router.delete("/marks-list/:id", protect, deleteMarksController);
 
 module.exports = router;

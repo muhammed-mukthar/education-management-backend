@@ -3,6 +3,7 @@ const errorHandler = require("../middlewares/errorMiddleware");
 const QuizOptions = require("../models/QuizModal");
 const userModel = require("../models/userModel");
 const errorResponse = require("../utils/errorResponse");
+const MarkSheet = require("../models/MarkSheet");
 
 // JWT TOKEN
 exports.sendToken = (user, statusCode, res) => {
@@ -97,6 +98,21 @@ exports.userListController = async (req, res, next) => {
   }
 };
 
+exports.studentUsersController = async (req, res, next) => {
+  try {
+    let teacherData = req.user;
+    const userData = await userModel.find({
+      role: "student",
+      course: teacherData?.course,
+    });
+
+    console.log(userData, teacherData, "teacherData");
+    return res.status(200).json(userData);
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
 exports.createQuizController = async (req, res, next) => {
   try {
     const quizOption = new QuizOptions(req.body.quizOptions);
@@ -131,5 +147,75 @@ exports.acceptUserController = async (req, res, next) => {
   } catch (error) {
     console.error("Error accepting user:", error);
     res.status(500).send("Error accepting user");
+  }
+};
+
+//marks controller
+
+exports.createMarksController = async (req, res, next) => {
+  try {
+    let userData = req.user;
+    const { subject, mark } = req.body;
+    const Mark = await MarkSheet.create({
+      subject,
+      mark,
+      userId: userData._id,
+    });
+
+    console.log(userData, Mark, "Mark");
+    return res.status(200).json(Mark);
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+exports.getMarksController = async (req, res, next) => {
+  try {
+    let userData = req.user;
+    const Mark = await MarkSheet.find({
+      userId: userData._id,
+    });
+
+    console.log(userData, Mark, "Mark");
+    return res.status(200).json(Mark);
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+exports.editMarksController = async (req, res, next) => {
+  try {
+    let userData = req.user;
+    const { mark, markId } = req.body;
+    const Mark = await MarkSheet.findByIdAndUpdate(
+      { _id: new mongoose.Types.ObjectId(markId) },
+      {
+        $set: { mark: mark },
+      }
+    );
+
+    console.log(userData, Mark, "Mark");
+    return res.status(200).json(Mark);
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+exports.deleteMarksController = async (req, res, next) => {
+  try {
+    let userData = req.user;
+    const markId = req.params.id;
+    const Mark = await MarkSheet.findOneAndDelete({
+      _id: new mongoose.Types.ObjectId(markId),
+    });
+
+    console.log(userData, Mark, "Mark");
+    return res.status(200).json(Mark);
+  } catch (error) {
+    console.log(error);
+    next(error);
   }
 };
