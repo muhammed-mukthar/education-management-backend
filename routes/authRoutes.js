@@ -45,7 +45,7 @@ router.post("/marks/users", protect, studentUsersController);
 router.post("/marks/create", protect, createMarksController);
 router.put("/marks/edit", protect, editMarksController);
 
-router.get("/mark-list", protect, getMarksController);
+router.get("/marks/all", protect, getMarksController);
 router.delete("/marks-list/:id", protect, deleteMarksController);
 
 module.exports = router;
