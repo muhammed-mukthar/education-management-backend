@@ -1,4 +1,4 @@
-const { default: mongoose } = require("mongoose");
+const { default: mongoose, mongo } = require("mongoose");
 const errorHandler = require("../middlewares/errorMiddleware");
 const QuizOptions = require("../models/QuizModal");
 const userModel = require("../models/userModel");
@@ -155,11 +155,11 @@ exports.acceptUserController = async (req, res, next) => {
 exports.createMarksController = async (req, res, next) => {
   try {
     let userData = req.user;
-    const { subject, mark } = req.body;
+    const { subject, mark, userId } = req.body;
     const Mark = await MarkSheet.create({
       subject,
       mark,
-      userId: userData._id,
+      userId: userId,
     });
 
     console.log(userData, Mark, "Mark");
@@ -169,7 +169,20 @@ exports.createMarksController = async (req, res, next) => {
     next(error);
   }
 };
+exports.getMarksParamsController = async (req, res, next) => {
+  try {
+    let userId = req.params.id;
+    const Mark = await MarkSheet.find({
+      userId: new mongoose.Types.ObjectId(userId),
+    });
 
+    console.log(userId, Mark, "Mark");
+    return res.status(200).json(Mark);
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
 exports.getMarksController = async (req, res, next) => {
   try {
     let userData = req.user;

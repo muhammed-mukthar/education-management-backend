@@ -12,6 +12,7 @@ const {
   getMarksController,
   editMarksController,
   deleteMarksController,
+  getMarksParamsController,
 } = require("../controllers/authController");
 const protect = require("../middlewares/autherisationMiddleware");
 
@@ -44,8 +45,9 @@ router.post("/marks/users", protect, studentUsersController);
 
 router.post("/marks/create", protect, createMarksController);
 router.put("/marks/edit", protect, editMarksController);
-
 router.get("/marks/all", protect, getMarksController);
-router.delete("/marks-list/:id", protect, deleteMarksController);
+router.get("/mark-list/:id", protect, getMarksParamsController);
+
+router.delete("/marks/delete/:id", protect, deleteMarksController);
 
 module.exports = router;
