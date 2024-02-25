@@ -13,6 +13,9 @@ const {
   editMarksController,
   deleteMarksController,
   getMarksParamsController,
+  createTestsController,
+  getTestsByTeacherController,
+  getTestsBySubjectController,
 } = require("../controllers/authController");
 const protect = require("../middlewares/autherisationMiddleware");
 
@@ -49,5 +52,10 @@ router.get("/marks/all", protect, getMarksController);
 router.get("/mark-list/:id", protect, getMarksParamsController);
 
 router.delete("/marks/delete/:id", protect, deleteMarksController);
+
+//tests
+router.post("/tests/create", protect, createTestsController);
+router.get("/teacher-tests", protect, getTestsByTeacherController);
+router.get("/subject-tests", protect, getTestsBySubjectController);
 
 module.exports = router;

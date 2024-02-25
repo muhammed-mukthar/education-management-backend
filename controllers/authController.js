@@ -4,6 +4,7 @@ const QuizOptions = require("../models/QuizModal");
 const userModel = require("../models/userModel");
 const errorResponse = require("../utils/errorResponse");
 const MarkSheet = require("../models/MarkSheet");
+const classTest = require("../models/testModal");
 
 // JWT TOKEN
 exports.sendToken = (user, statusCode, res) => {
@@ -227,6 +228,52 @@ exports.deleteMarksController = async (req, res, next) => {
 
     console.log(userData, Mark, "Mark");
     return res.status(200).json(Mark);
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+//tests
+
+exports.createTestsController = async (req, res, next) => {
+  try {
+    let userData = req.user;
+    const { name, course, teacher } = req.body;
+    const result = await classTest.create({
+      name,
+      course: userData.course,
+      teacher: userData.username,
+      teacherId: userData?._id,
+    });
+    return res.status(200).json(result);
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+exports.getTestsByTeacherController = async (req, res, next) => {
+  try {
+    let userData = req.user;
+    const result = await classTest.find({
+      teacherId: userData._id,
+    });
+
+    return res.status(200).json(result);
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+exports.getTestsBySubjectController = async (req, res, next) => {
+  try {
+    let userData = req.user;
+    const result = await classTest.find({
+      course: userData?.course,
+    });
+
+    return res.status(200).json(result);
   } catch (error) {
     console.log(error);
     next(error);

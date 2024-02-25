@@ -18,6 +18,10 @@ const quizOptionsSchema = new Schema({
     type: [String],
     required: true,
   },
+  testId: {
+    type: String,
+    required: true,
+  },
 });
 
 // Define pre-save middleware to auto-increment the 'number' field
