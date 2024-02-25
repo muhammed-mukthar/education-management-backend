@@ -318,7 +318,7 @@ exports.getTestsResultsController = async (req, res, next) => {
   try {
     let userData = req.user;
     let testId = req.params.id;
-    const result = await classTest.find({
+    const result = await TestResult.find({
       testId: testId,
     });
 
