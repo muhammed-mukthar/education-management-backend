@@ -381,3 +381,39 @@ exports.downloadFileController = async (req, res) => {
     res.status(500).send("Server error");
   }
 };
+exports.getAllStudentFiles = async (req, res) => {
+  try {
+    // Fetch files from the database
+    let userData = req.user;
+
+    const files = await FileModal.find({ course: userData.course });
+    res.json(files);
+  } catch (error) {
+    console.error("Error fetching files:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
+exports.getAllTeacherFiles = async (req, res) => {
+  try {
+    // Fetch files from the database
+    const files = await FileModal.find();
+    res.json(files);
+  } catch (error) {
+    console.error("Error fetching files:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+exports.deleteFiles = async (req, res) => {
+  try {
+    const fileId = req.params.id;
+    // Fetch files from the database
+    const files = await FileModal.findOneAndDelete({
+      _id: mongoose.Types.ObjectId(fileId),
+    });
+    res.json(files);
+  } catch (error) {
+    console.error("Error fetching files:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+};

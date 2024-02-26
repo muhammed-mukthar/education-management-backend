@@ -22,6 +22,9 @@ const {
   sendEmailController,
   downloadFileController,
   fileUploadController,
+  getAllTeacherFiles,
+  getAllStudentFiles,
+  deleteFiles,
 } = require("../controllers/authController");
 const protect = require("../middlewares/autherisationMiddleware");
 const path = require("path");
@@ -76,6 +79,8 @@ router.get("/test-result/:id", protect, getTestsResultsController);
 router.post("/send-email", protect, sendEmailController);
 router.post("/upload", protect, upload.single("file"), fileUploadController);
 router.get("/download/:id", downloadFileController);
-
+router.get("/files", protect, getAllTeacherFiles);
+router.delete("/file/:id", protect, deleteFiles);
+router.get("student-files", protect, getAllStudentFiles);
 //file upload
 module.exports = router;
