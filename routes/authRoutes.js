@@ -81,6 +81,6 @@ router.post("/upload", protect, upload.single("file"), fileUploadController);
 router.get("/download/:id", downloadFileController);
 router.get("/files", protect, getAllTeacherFiles);
 router.delete("/file/:id", protect, deleteFiles);
-router.get("student-files", protect, getAllStudentFiles);
+router.get("/student/files", protect, getAllStudentFiles);
 //file upload
 module.exports = router;
