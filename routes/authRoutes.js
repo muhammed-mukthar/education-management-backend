@@ -19,6 +19,7 @@ const {
   deleteTestController,
   createTestResultController,
   getTestsResultsController,
+  sendEmailController,
 } = require("../controllers/authController");
 const protect = require("../middlewares/autherisationMiddleware");
 
@@ -65,5 +66,9 @@ router.delete("/tests/delete/:id", protect, deleteTestController);
 //testResult
 router.post("/result/create", protect, createTestResultController);
 router.get("/test-result/:id", protect, getTestsResultsController);
+
+//SEND EMAIL
+
+router.post("/send-email", protect, sendEmailController);
 
 module.exports = router;

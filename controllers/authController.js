@@ -6,6 +6,7 @@ const errorResponse = require("../utils/errorResponse");
 const MarkSheet = require("../models/MarkSheet");
 const classTest = require("../models/testModal");
 const TestResult = require("../models/TestResult");
+const sendEmail = require("../config/email");
 
 // JWT TOKEN
 exports.sendToken = (user, statusCode, res) => {
@@ -323,6 +324,29 @@ exports.getTestsResultsController = async (req, res, next) => {
     });
 
     return res.status(200).json(result);
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+exports.sendEmailController = async (req, res, next) => {
+  try {
+    let userId = req.body.userId;
+    const userData = await userModel.findOne({
+      _id: mongoose.Types.ObjectId(userId),
+    });
+    console.log(userData, "isers");
+    const to = userData.parentsEmail; // Parent's email address
+    const subject = "Mark List Update";
+    const placeholders = {
+      title: "Mark List Update",
+      body: "Hello, we are pleased to inform you that the mark list for your child has been updated. You can now review your child's performance. Please login to your child's account to view the updated mark list. If you have any questions or concerns, feel free to contact us. Thank you! Sincerely, Your School Administration",
+      ctaText: "Login Now",
+      ctaLink: "http://localhost:3000/login",
+    };
+
+    sendEmail(to, subject, placeholders);
+    return res.status(200).json({ message: "success" });
   } catch (error) {
     console.log(error);
     next(error);
