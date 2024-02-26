@@ -7,6 +7,7 @@ const MarkSheet = require("../models/MarkSheet");
 const classTest = require("../models/testModal");
 const TestResult = require("../models/TestResult");
 const sendEmail = require("../config/email");
+const FileModal = require("../models/FileModal");
 
 // JWT TOKEN
 exports.sendToken = (user, statusCode, res) => {
@@ -350,5 +351,33 @@ exports.sendEmailController = async (req, res, next) => {
   } catch (error) {
     console.log(error);
     next(error);
+  }
+};
+exports.fileUploadController = async (req, res) => {
+  try {
+    let userData = req.user;
+
+    const newFile = new FileModal({
+      user: userData._id, // Assuming you have user ID in the request body
+      filename: req.file.originalname,
+      teacher: userData.username,
+      course: userData.course,
+      path: req.file.path,
+    });
+    await newFile.save();
+    res.send("File uploaded successfully");
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Server error");
+  }
+};
+
+exports.downloadFileController = async (req, res) => {
+  try {
+    const file = await FileModal.findById(req.params.id);
+    res.download(file.path);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Server error");
   }
 };

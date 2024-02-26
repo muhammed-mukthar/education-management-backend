@@ -20,8 +20,12 @@ const {
   createTestResultController,
   getTestsResultsController,
   sendEmailController,
+  downloadFileController,
+  fileUploadController,
 } = require("../controllers/authController");
 const protect = require("../middlewares/autherisationMiddleware");
+const path = require("path");
+const upload = require("../config/multerConfig");
 
 //router object
 const router = express.Router();
@@ -70,5 +74,8 @@ router.get("/test-result/:id", protect, getTestsResultsController);
 //SEND EMAIL
 
 router.post("/send-email", protect, sendEmailController);
+router.post("/upload", protect, upload.single("file"), fileUploadController);
+router.get("/download/:id", downloadFileController);
 
+//file upload
 module.exports = router;
