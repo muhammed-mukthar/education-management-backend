@@ -148,6 +148,21 @@ exports.acceptUserController = async (req, res, next) => {
       },
       { $set: { verify: true } }
     );
+    const userData = await userModel
+      .findOne({
+        _id: mongoose.Types.ObjectId(userId),
+      })
+      .lean();
+    const to = userData.email; // Parent's email address
+    const subject = "Registration Accepted";
+    const placeholders = {
+      title: "Registration Accepted",
+      body: "Hello, we are pleased to inform you that your account has been activated log into your account to continue ",
+      ctaText: "Login Now",
+      ctaLink: "http://localhost:3000/login",
+    };
+
+    sendEmail(to, subject, placeholders);
     res.status(201).json(user);
   } catch (error) {
     console.error("Error accepting user:", error);
@@ -155,6 +170,35 @@ exports.acceptUserController = async (req, res, next) => {
   }
 };
 
+exports.rejectUserController = async (req, res, next) => {
+  try {
+    let userId = req.params.id;
+    const user = await userModel.findOneAndUpdate(
+      {
+        _id: mongoose.Types.ObjectId(userId),
+      },
+      { $set: { isRejected: true } }
+    );
+    const userData = await userModel
+      .findOne({
+        _id: mongoose.Types.ObjectId(userId),
+      })
+      .lean();
+    const to = userData.email; // Parent's email address
+    const subject = "Registration Rejected";
+    const placeholders = {
+      title: "Registration Rejected",
+      body: "Hello, we want to inform you that your account has been Rejected by the admin ",
+      ctaText: "User Rejected",
+      ctaLink: "http://localhost:3000/login",
+    };
+    sendEmail(to, subject, placeholders);
+    res.status(201).json(user);
+  } catch (error) {
+    console.error("Error accepting user:", error);
+    res.status(500).send("Error accepting user");
+  }
+};
 //marks controller
 
 exports.createMarksController = async (req, res, next) => {
