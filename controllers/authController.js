@@ -221,12 +221,30 @@ exports.createMarksController = async (req, res, next) => {
 exports.getMarksParamsController = async (req, res, next) => {
   try {
     let userId = req.params.id;
-    const Mark = await MarkSheet.find({
-      userId: new mongoose.Types.ObjectId(userId),
-    });
+    const Mark = await MarkSheet.find(
+      {
+        userId: new mongoose.Types.ObjectId(userId),
+      },
+      { subject: 1, mark: 1 }
+    );
+    const userData = await userModel
+      .findOne({
+        _id: mongoose.Types.ObjectId(userId),
+      })
+      .lean();
 
+    let data = [];
+
+    for (const element of Mark) {
+      data.push({
+        name: userData?.username,
+        subject: element?.subject,
+        mark: element?.mark,
+        total: 100,
+      });
+    }
     console.log(userId, Mark, "Mark");
-    return res.status(200).json(Mark);
+    return res.status(200).json(data);
   } catch (error) {
     console.log(error);
     next(error);
