@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const JWT = require("jsonwebtoken");
 const cookie = require("cookie");
+const MarkSheet = require("./MarkSheet");
 
 //model
 const userSchema = new mongoose.Schema({
@@ -84,6 +85,36 @@ userSchema.methods.getSignedToken = function (res) {
 
   return { accessToken, refreshToken };
 };
+// Middleware to create mark sheets for new users
+userSchema.post("save", async function (doc, next) {
+  if (doc.role !== "student") {
+    // If the user role is not student, skip mark sheet creation
+    return next();
+  }
+  const subjects = [
+    "physics",
+    "chemistry",
+    "biology",
+    "english",
+    "malayalam",
+    "social_science",
+    "maths",
+  ];
+
+  // Create a mark sheet for each subject with marks initialized to 0
+  try {
+    for (const subject of subjects) {
+      await MarkSheet.create({
+        subject: subject,
+        mark: 0,
+        userId: doc._id,
+      });
+    }
+    next();
+  } catch (error) {
+    next(error);
+  }
+});
 
 const User = mongoose.model("User", userSchema);
 
