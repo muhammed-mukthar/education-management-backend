@@ -278,7 +278,7 @@ exports.getMarksParamsController = async (req, res, next) => {
       {
         userId: new mongoose.Types.ObjectId(userId),
       },
-      { subject: 1, mark: 1 }
+      { subject: 1, mark: 1, _id: 1 }
     );
     const userData = await userModel
       .findOne({
@@ -293,6 +293,7 @@ exports.getMarksParamsController = async (req, res, next) => {
         name: userData?.username,
         subject: element?.subject,
         mark: element?.mark,
+        _id: element._id,
         total: 100,
       });
     }
