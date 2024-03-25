@@ -27,6 +27,9 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: "BCA",
   },
+  subject: {
+    type: String,
+  },
   parentsEmail: {
     type: String,
   },

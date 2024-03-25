@@ -28,7 +28,8 @@ exports.sendToken = (user, statusCode, res) => {
 //REGISTER
 exports.registerContoller = async (req, res, next) => {
   try {
-    const { username, email, password, parentsEmail, role, course } = req.body;
+    const { username, email, password, parentsEmail, role, course, subject } =
+      req.body;
     //exisitng user
     const exisitingEmail = await userModel.findOne({ email });
     if (exisitingEmail) {
@@ -43,6 +44,7 @@ exports.registerContoller = async (req, res, next) => {
       password,
       parentsEmail,
       role,
+      subject,
       course,
     });
     req.userid = user.id;
@@ -104,7 +106,7 @@ exports.userListController = async (req, res, next) => {
 exports.teacherListController = async (req, res, next) => {
   try {
     const userData = await userModel.find({
-      role: { $in: ["teacher", "batch"] },
+      role: { $in: ["teacher", "branch"] },
     });
     console.log(userData);
     return res.status(200).json(userData);
@@ -192,7 +194,22 @@ exports.acceptUserController = async (req, res, next) => {
     res.status(500).send("Error accepting user");
   }
 };
+exports.promoteUserToBranchController = async (req, res, next) => {
+  try {
+    let userId = req.params.id;
+    const user = await userModel.findOneAndUpdate(
+      {
+        _id: mongoose.Types.ObjectId(userId),
+      },
+      { $set: { role: "branch" } }
+    );
 
+    res.status(201).json(user);
+  } catch (error) {
+    console.error("Error updating user:", error);
+    res.status(500).send("Error updating user");
+  }
+};
 exports.DeleteUserController = async (req, res, next) => {
   try {
     let userId = req.params.id;
