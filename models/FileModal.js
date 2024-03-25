@@ -12,6 +12,9 @@ const FileModalSchema = new mongoose.Schema(
     course: {
       type: String,
     },
+    subject: {
+      type: String,
+    },
     filename: {
       type: String,
     },

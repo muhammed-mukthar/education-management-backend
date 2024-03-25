@@ -477,6 +477,7 @@ exports.fileUploadController = async (req, res) => {
       filename: req.file.originalname,
       teacher: userData.username,
       course: userData.course,
+      subject: userData.subject,
       path: req.file.path,
     });
     await newFile.save();
