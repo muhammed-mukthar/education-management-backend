@@ -26,6 +26,9 @@ const {
   getAllStudentFiles,
   deleteFiles,
   rejectUserController,
+  teacherListController,
+  studentListController,
+  DeleteUserController,
 } = require("../controllers/authController");
 const protect = require("../middlewares/autherisationMiddleware");
 const path = require("path");
@@ -44,14 +47,16 @@ router.post("/login", loginController);
 //LOGOUT
 router.post("/logout", logoutController);
 
-router.post("/list", userListController);
 router.post("/create-quiz", createQuizController);
 router.post("/list-quiz/:id", listQuizController);
 
 //user management
-
+router.post("/list", userListController);
+router.post("/teacher", teacherListController);
+router.post("/student", studentListController);
 router.post("/accept/:id", acceptUserController);
 router.post("/reject/:id", rejectUserController);
+router.delete("/user/:id", DeleteUserController);
 
 //teaher
 

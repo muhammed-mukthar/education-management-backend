@@ -101,7 +101,30 @@ exports.userListController = async (req, res, next) => {
     next(error);
   }
 };
-
+exports.teacherListController = async (req, res, next) => {
+  try {
+    const userData = await userModel.find({
+      role: { $in: ["teacher", "batch"] },
+    });
+    console.log(userData);
+    return res.status(200).json(userData);
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+exports.studentListController = async (req, res, next) => {
+  try {
+    const userData = await userModel.find({
+      role: "student",
+    });
+    console.log(userData);
+    return res.status(200).json(userData);
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
 exports.studentUsersController = async (req, res, next) => {
   try {
     let teacherData = req.user;
@@ -170,6 +193,19 @@ exports.acceptUserController = async (req, res, next) => {
   }
 };
 
+exports.DeleteUserController = async (req, res, next) => {
+  try {
+    let userId = req.params.id;
+    const user = await userModel.findOneAndDelete({
+      _id: mongoose.Types.ObjectId(userId),
+    });
+
+    res.status(201).json(user);
+  } catch (error) {
+    console.error("Error Deleting user:", error);
+    res.status(500).send("Error Deleting user");
+  }
+};
 exports.rejectUserController = async (req, res, next) => {
   try {
     let userId = req.params.id;
