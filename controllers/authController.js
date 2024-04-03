@@ -153,6 +153,19 @@ exports.createQuizController = async (req, res, next) => {
   }
 };
 
+exports.deleteQuizController = async (req, res, next) => {
+  try {
+    let quizId = req.params.id;
+    console.log(quizId);
+    const quizOption = await QuizOptions.findOneAndDelete({
+      _id: mongoose.Types.ObjectId(quizId),
+    });
+    res.status(201).json(quizOption);
+  } catch (error) {
+    console.error("Error creating quiz option:", error);
+    res.status(500).send("Internal Server Error");
+  }
+};
 exports.listQuizController = async (req, res, next) => {
   try {
     let testId = req.params.id;
@@ -210,6 +223,23 @@ exports.promoteUserToBranchController = async (req, res, next) => {
     res.status(500).send("Error updating user");
   }
 };
+exports.unPromoteUserToBranchController = async (req, res, next) => {
+  try {
+    let userId = req.params.id;
+    const user = await userModel.findOneAndUpdate(
+      {
+        _id: mongoose.Types.ObjectId(userId),
+      },
+      { $set: { role: "teacher" } }
+    );
+
+    res.status(201).json(user);
+  } catch (error) {
+    console.error("Error updating user:", error);
+    res.status(500).send("Error updating user");
+  }
+};
+
 exports.DeleteUserController = async (req, res, next) => {
   try {
     let userId = req.params.id;
