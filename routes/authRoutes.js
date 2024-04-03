@@ -30,6 +30,8 @@ const {
   studentListController,
   DeleteUserController,
   promoteUserToBranchController,
+  unPromoteUserToBranchController,
+  deleteQuizController,
 } = require("../controllers/authController");
 const protect = require("../middlewares/autherisationMiddleware");
 const path = require("path");
@@ -49,6 +51,8 @@ router.post("/login", loginController);
 router.post("/logout", logoutController);
 
 router.post("/create-quiz", createQuizController);
+router.delete("/quiz/:id", deleteQuizController);
+
 router.post("/list-quiz/:id", listQuizController);
 
 //user management
@@ -59,6 +63,7 @@ router.post("/accept/:id", acceptUserController);
 router.post("/reject/:id", rejectUserController);
 router.delete("/user/:id", DeleteUserController);
 router.post("/promote/:id", promoteUserToBranchController);
+router.post("/unpromote/:id", unPromoteUserToBranchController);
 
 //teaher
 
